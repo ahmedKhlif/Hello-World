@@ -1,28 +1,33 @@
 pipeline {
     agent any
-    tools{ jdk 'Jdk17' }
-    environment { JAVA_HOME = 'C:\\Program Files\\Java\\jdk-17' }
+    tools {
+        jdk 'Jdk17'
+    }
+    environment {
+        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
+        PATH = "$JAVA_HOME/bin:$PATH"
+    }
     stages {
-        stage ('Compile Stage') {
+        stage('Compile Stage') {
             steps {
-                withMaven(maven : 'maven-3.9.8') {
-                    bat 'mvn clean compile'
+                withMaven(maven: 'maven-3.9.8') {
+                    sh 'mvn clean compile'
                 }
             }
         }
-        stage ('Testing Stage') {
+        stage('Testing Stage') {
             steps {
-                withMaven(maven : 'maven-3.9.8') {
-                    bat 'mvn test'
+                withMaven(maven: 'maven-3.9.8') {
+                    sh 'mvn test'
                 }
             }
         }
-        stage ('Install Stage') {
+        stage('Install Stage') {
             steps {
-                withMaven(maven : 'maven-3.9.8') {
-                    bat 'mvn install -Dmaven.test.skip=true'
-                } 
-            } 
-        } 
+                withMaven(maven: 'maven-3.9.8') {
+                    sh 'mvn install -Dmaven.test.skip=true'
+                }
+            }
+        }
     }
 }
